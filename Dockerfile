@@ -4,6 +4,13 @@
 	# Based on docker image: genomicpariscentre/htseq:0.6.1p1
 	# Credits: Laurent Jourdren <jourdren@biologie.ens.fr>, Genomic Paris Centre
 	# Source: https://registry.hub.docker.com/u/genomicpariscentre/htseq/dockerfile/
+
+# To build:
+	# cd <build_dir>
+	# git clone https://github.com/dyndna/docker_for_pcawg14_htseq.git
+	# cd docker_for_pcawg14_htseq
+	# docker build -t dyndna/pcawg14_htseq:0.9.2 . | tee -a build.log
+	# docker inspect dyndna/pcawg14_htseq:0.9.2
 ############################################################
 
 # Set the base image to Ubuntu
@@ -23,7 +30,7 @@ RUN apt-get install --yes build-essential python2.7-dev python-numpy python-matp
 RUN useradd -m -d /home/foo -s /bin/bash -c "Dummy User"  -U foo && id -a foo
 
 # Download and uncompress HTSeq archive
-ADD htseq/HTSeq-0.6.1p2.tar.gz /tmp/
+ADD ./htseq/HTSeq-0.6.1p2.tar.gz /tmp/
 
 # Install HTSeq
 RUN cd /tmp/* && python setup.py build && python setup.py install
@@ -39,8 +46,8 @@ RUN ln -s /opt/samtools/default/bin/* /usr/local/bin/
 
 # Configure /etc/profile
 RUN cd /etc && cp profile profile.orig.bk && mkdir -p /etc/profile.d
-ADD profile/profile /etc/
-ADD profile/ngstools.sh /etc/profile.d/
+ADD ./profile/profile /etc/
+ADD ./profile/ngstools.sh /etc/profile.d/
 
 # Cleanup
 RUN apt-get clean
